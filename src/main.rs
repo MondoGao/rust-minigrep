@@ -1,8 +1,15 @@
+use std::collections::VecDeque;
 
+use minigrep::Config;
 
 fn main() {
-    let (query, file_path) = minigrep::parse_args();
-    println!("Searching for {} in file {}", query, file_path);
+    let args = std::env::args().collect::<VecDeque<String>>();
 
-    let contents = minigrep::read_file(&file_path);
+    let config = Config::new(args);
+    println!(
+        "Searching for {} in file {}",
+        config.query, config.file_path
+    );
+
+    let contents = minigrep::read_file(&config.file_path);
 }
