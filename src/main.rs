@@ -5,11 +5,14 @@ use minigrep::Config;
 fn main() {
     let args = std::env::args().collect::<VecDeque<String>>();
 
-    let config = Config::new(args);
+    let config = Config::new(args).expect("parse config failed");
     println!(
         "Searching for {} in file {}",
         config.query, config.file_path
     );
 
-    let contents = minigrep::read_file(&config.file_path);
+    if let Err(e) = minigrep::run(config) {
+        println!("Error: {e}");
+        process::exit(1);
+    }
 }
