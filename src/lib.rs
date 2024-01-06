@@ -25,5 +25,37 @@ pub fn read_file(file_path: &String) -> String {
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = read_file(&config.file_path);
+
+    for line in search(&config.query, &contents) {
+        println!("{line}");
+    }
+
     Ok(())
+}
+
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn one_result() {
+        let query = "world";
+        let contents = "\
+        hello world
+        你好";
+
+        assert_eq!(vec!["hello world"], search(query, contents));
+    }
 }
