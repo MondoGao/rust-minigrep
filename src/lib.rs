@@ -32,13 +32,13 @@ pub fn read_file(file_path: &String) -> String {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = read_file(&config.file_path);
 
-    let res = if config.ignore_case {
-        search_case_insensitive(&config.query, &contents)
+    let func = if config.ignore_case {
+        search_case_insensitive
     } else {
-        search(&config.query, &contents)
+        search
     };
 
-    for line in res {
+    for line in func(&config.query, &contents) {
         println!("{line}");
     }
 
